@@ -14,19 +14,18 @@ void main() {
 
 class _MainApp extends State<MainApp> {
   final rwJson = RwJson();
-  // Color colstr = Colors.brown;
   List<String> recordLines = [];
   List<String> threemealsLines = [];
   List<String> snackLines = [];
   List<String> otherLines = [];
   List<String> incomeLines = [];
-
   Color bgcol = Color(0xFF795548);
   String totalLine = '';
   double threemeals = 0;
   double snack = 0;
   double other = 0;
   double income = 0;
+  Color? textcol;
   @override
   void initState() {
     super.initState();
@@ -155,9 +154,12 @@ class _MainApp extends State<MainApp> {
       final hexStr = (raw is String) ? raw : 'FFFFFFFF';
       final bkhex = int.tryParse(hexStr, radix: 16) ?? 0xFFFFFFFF;
       print('读取到 ${bkhex.toRadixString(16).padLeft(8, '0').toUpperCase()}');
-
+      Color textcolcache = Color(bkhex).computeLuminance() > 0.5
+          ? Colors.black
+          : Colors.white;
       if (!mounted) return;
       setState(() {
+        textcol = textcolcache;
         bgcol = Color(bkhex);
       });
     } catch (e) {
@@ -219,12 +221,13 @@ class _MainApp extends State<MainApp> {
     return Scaffold(
       backgroundColor: bgcol,
       appBar: AppBar(
+        backgroundColor: bgcol,
         title: Text(
           '记账本',
           style: TextStyle(
             fontSize: 35,
             fontWeight: FontWeight.bold,
-            color: bgcol,
+            color: textcol,
           ),
         ),
       ),
@@ -312,7 +315,7 @@ class _MainApp extends State<MainApp> {
               onPressed: () async {
                 final result = await showDialog<Map<String, dynamic>>(
                   context: context,
-                  builder: (ctx) => Add(col: bgcol),
+                  builder: (ctx) => Add(col: bgcol, textcol: textcol),
                 );
                 if (result == null) {
                   return;
@@ -330,7 +333,7 @@ class _MainApp extends State<MainApp> {
                 _load();
               },
               tooltip: '添加新的内容',
-              backgroundColor: Colors.white,
+              backgroundColor: textcol ?? Colors.white,
               foregroundColor: bgcol,
               child: const Icon(Icons.add),
             ),
@@ -343,14 +346,21 @@ class _MainApp extends State<MainApp> {
                   builder: (ctx) => AddColor(color: bgcol),
                 );
                 if (bkcol == null) return;
+                Color textColorFor(Color background) {
+                  return background.computeLuminance() > 0.5
+                      ? Colors.black
+                      : Colors.white;
+                }
 
+                Color textColSS = textColorFor(bkcol);
                 setState(() {
+                  textcol = textColSS;
                   bgcol = bkcol;
                 });
                 await RwJson().wConfig(bgcol);
               },
-              tooltip: '添加新的内容',
-              backgroundColor: Colors.white,
+              tooltip: '修改颜色',
+              backgroundColor: textcol ?? Colors.white,
               foregroundColor: bgcol,
               child: const Icon(Icons.settings),
             ),

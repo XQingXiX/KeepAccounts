@@ -8,11 +8,14 @@ class Add extends StatefulWidget {
     this.initialNote,
     this.initialCategory,
     this.col,
+    this.textcol,
   });
   final double? initialAmount;
   final String? initialNote;
   final String? initialCategory;
   final Color? col;
+  final Color? textcol;
+
   @override
   State<Add> createState() => _Add();
 }
@@ -25,7 +28,7 @@ class _Add extends State<Add> {
   String noteHint = '默认：无描述';
   String category = '其他';
   List<String> categories = ['三餐', '零食', '收入', '其他'];
-  Color clr = Colors.white;
+  Color? clr;
   @override
   void initState() {
     super.initState();
@@ -38,6 +41,7 @@ class _Add extends State<Add> {
     if (widget.initialCategory != null) {
       category = widget.initialCategory!;
     }
+    clr = widget.textcol ?? Colors.white;
   }
 
   @override
@@ -92,7 +96,7 @@ class _Add extends State<Add> {
       child: Container(
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade50),
+          border: Border.all(color: widget.textcol ?? Colors.white),
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         child: SingleChildScrollView(
@@ -103,18 +107,23 @@ class _Add extends State<Add> {
               TextField(
                 controller: money,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
-                style: TextStyle(color: Colors.white),
-                cursorColor: Colors.white,
+                style: TextStyle(color: widget.textcol),
+                cursorColor: widget.textcol,
                 decoration: InputDecoration(
                   labelText: moneyHint,
                   hintText: '请输入金额(-开头为消费)',
                   labelStyle: TextStyle(color: clr),
-                  hintStyle: TextStyle(color: Colors.white70),
+                  hintStyle: TextStyle(color: widget.textcol ?? Colors.white),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
+                    borderSide: BorderSide(
+                      color: widget.textcol ?? Colors.white,
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2),
+                    borderSide: BorderSide(
+                      color: widget.textcol ?? Colors.white,
+                      width: 2,
+                    ),
                   ),
                   border: OutlineInputBorder(),
                 ),
@@ -124,19 +133,26 @@ class _Add extends State<Add> {
                 controller: note,
                 maxLength: 20,
 
-                style: TextStyle(color: Colors.white),
-                cursorColor: Colors.white,
+                style: TextStyle(color: widget.textcol ?? Colors.white),
+                cursorColor: widget.textcol ?? Colors.white,
                 decoration: InputDecoration(
                   labelText: '用途',
                   hintText: '默认：无描述',
-                  counterStyle: TextStyle(color: Colors.white),
-                  labelStyle: TextStyle(color: Colors.white),
-                  hintStyle: TextStyle(color: Colors.white70),
+                  counterStyle: TextStyle(
+                    color: widget.textcol ?? Colors.white,
+                  ),
+                  labelStyle: TextStyle(color: widget.textcol ?? Colors.white),
+                  hintStyle: TextStyle(color: widget.textcol ?? Colors.white),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
+                    borderSide: BorderSide(
+                      color: widget.textcol ?? Colors.white,
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2),
+                    borderSide: BorderSide(
+                      color: widget.textcol ?? Colors.white,
+                      width: 2,
+                    ),
                   ),
                   border: OutlineInputBorder(),
                 ),
@@ -151,23 +167,31 @@ class _Add extends State<Add> {
                 borderRadius: BorderRadius.circular(12),
 
                 dropdownColor: widget.col,
-                style: const TextStyle(color: Colors.white),
-                iconEnabledColor: Colors.white,
-                decoration: const InputDecoration(
+                style: TextStyle(color: widget.textcol ?? Colors.white),
+                iconEnabledColor: widget.textcol ?? Colors.white,
+                decoration: InputDecoration(
                   labelText: '分类',
-                  labelStyle: TextStyle(color: Colors.white),
+                  labelStyle: TextStyle(color: widget.textcol ?? Colors.white),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
+                    borderSide: BorderSide(
+                      color: widget.textcol ?? Colors.white,
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2),
+                    borderSide: BorderSide(
+                      color: widget.textcol ?? Colors.white,
+                      width: 2,
+                    ),
                   ),
                   border: OutlineInputBorder(),
                 ),
                 items: categories.map((c) {
                   return DropdownMenuItem<String>(
                     value: c,
-                    child: Text(c, style: const TextStyle(color: Colors.white)),
+                    child: Text(
+                      c,
+                      style: TextStyle(color: widget.textcol ?? Colors.white),
+                    ),
                   );
                 }).toList(),
                 onChanged: (val) {
@@ -185,7 +209,7 @@ class _Add extends State<Add> {
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
+                      foregroundColor: widget.textcol ?? Colors.white,
                     ),
                     child: Text('取消'),
                   ),
@@ -193,7 +217,8 @@ class _Add extends State<Add> {
                   ElevatedButton(
                     onPressed: _submit,
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: widget.col,
+                      backgroundColor: Color(0xFFFFFFFF),
+                      foregroundColor: Color(0xFF000000),
                     ),
                     child: Text('确定'),
                   ),

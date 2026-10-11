@@ -50,12 +50,10 @@ class RwJson {
   }
 
   Future<void> wConfig(Color input) async {
-    //理论上我会得来一个Color(#FFFFFFFF)类型但是我要怎么转换这个#FFFFFFFF为String然后怎么回去(👁)
     File file = await _getFile('config');
     final argb = input.toARGB32();
     final bkjson = await rConfig();
     bkjson["colors"] = argb.toRadixString(16).padLeft(8, '0').toUpperCase();
-    print(bkjson["colors"]);
     await file.writeAsString(jsonEncode(bkjson));
   }
 }

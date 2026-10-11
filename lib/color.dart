@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const colorList = <Color>[
-  Color(0xFFD8BFA6),
+  Color(0xFFA9A9A9),
   Color(0xFFE9C8C8),
   Color(0xFFD9AAAA),
   Color(0xFFC98F8F),
@@ -10,7 +10,7 @@ const colorList = <Color>[
   Color(0xFFA99BC2),
   Color(0xFF8E82A8),
   Color(0xFFCBD9E6),
-  Color(0xFFA9C1D6),
+  Color(0xFF99CCFF),
   Color(0xFF8AA8C2),
   Color(0xFFD2DCC9),
   Color(0xFFB6C5A8),
@@ -101,13 +101,18 @@ class _AddColor extends State<AddColor> {
                 ],
               ),
             SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context, _preview),
-              style: ElevatedButton.styleFrom(
-                foregroundColor: _preview,
-                backgroundColor: Colors.white,
-              ),
-              child: const Text('确定'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(context, _preview),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: _preview,
+                    backgroundColor: Colors.white,
+                  ),
+                  child: const Text('确定'),
+                ),
+              ],
             ),
           ],
         ),
